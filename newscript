@@ -12,8 +12,8 @@ local http_req = request or http.request
 
 function beeeeeeeee()
 	local DiscordLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/testingstuffs/main/uilib"))()
-	local win = DiscordLib:Window("Central Hub (10+ Games/100+ Scripts)") -- Change the TOP ui name.
-	local infochannel = win:Server("Information","rbxassetid://14220986185") -- Change the Windows ui name.
+	local win = DiscordLib:Window("PasteDrop Hub (10+ Games/100+ Scripts)") -- Change the TOP UI name.
+	local infochannel = win:Server("Information","rbxassetid://14220986185") -- Change the Windows UI name.
 
 	local info = infochannel:Channel("Home") -- Change the first tab name.
 	local serv = win:Server("Home","rbxassetid://14188671658") -- Change the Windows ui name.
@@ -1175,62 +1175,47 @@ function beeeeeeeee()
 	end)
 end
 
-function CheckKey(key)
-	local keyValid = http_req({
-		Url = "https://bstlar.com/keys/validate/"..key,
-		Method = "GET",
-		Headers = {
-			["bstk"] = "f3eZ5Rldvkv7b89YG3xO8fnpOVM6x0vYU0IA" --Your boostellar header here.
-		},
-	})
-
-	return game:GetService("HttpService"):JSONDecode(keyValid.Body).valid
+local function generateDailyKey(seed)
+    local chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    local key = ''
+    for i = 1, 10 do
+        local index = ((string.byte(seed, i) + string.byte(seed, i + 1)) % #chars) + 1
+        key = key .. chars:sub(index, index)
+    end
+    return key
 end
+
+local function CheckKey(key)
+
+    local currentDate = os.date("%Y-%m-%d")
+    local seed = currentDate .. "your secret phrase here" 
+    local generatedKey = generateDailyKey(seed)
+
+    return key == generatedKey
+end
+
 
 
 local DiscordLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/NUTellaVING/Pastedrop/main/Library.lua"))()
-local win = DiscordLib:Window("Central Hub (10+ Games/100+ Scripts)") -- Change the TOP ui name.
-local serv = win:Server("Home","rbxassetid://14188671658") -- Change the Windows ui name.
-local Kys = serv:Channel("Key System") -- Change the first tab name.
+local win = DiscordLib:Window("PasteDrop Hub (10+ Games/100+ Scripts)") 
+local serv = win:Server("Home", "rbxassetid://14188671658") 
+local Kys = serv:Channel("Key System") 
 
 Kys:Textbox("Key Box", "Put the key here!", false, function(key)
-	print("Input Key: "..key)
-	local isValid = CheckKey(key)
-	if isValid then
-		game.CoreGui.Discord:Destroy()
-		beeeeeeeee()
-		writefile("Central.txt", key)
-	else
-	end
+    print("Input Key: " .. key)
+    local isValid = CheckKey(key)
+    if isValid then
+        game.CoreGui.Discord:Destroy()
+        beeeeeeeee()
+    else
+        DiscordLib:Notification("Invalid Key", "The key you entered is not valid.", "Okay!")
+    end
 end)
 
 Kys:Button("Get Key Link!", function()
-	DiscordLib:Notification("Notification", "Key Link has been copied to clipboard.", "Okay!")
-	setclipboard("https://central-script.com/getkey")
+    DiscordLib:Notification("Notification", "Key Link has been copied to clipboard.", "Okay!")
+    setclipboard("https://paste-drophub.com/getkey/")
 end)
-Kys:Label("central-script.com/getkey")
 
-
-
-if DEBUG then
-	game.CoreGui.Discord:Destroy()
-	beeeeeeeee()
-	writefile("Central.txt", key)
-else
-	local valid = isfile("Central.txt") 
-	if valid == true then
-		local key = readfile("Central.txt")
-		print("Input Key: "..key)
-		local isValid = CheckKey(key)
-		if isValid then
-			game.CoreGui.Discord:Destroy()
-			beeeeeeeee()
-			writefile("Central.txt", key)
-		else
-		end
-	end
-end
-
-
-
+Kys:Label("paste-drophub.com/getkey/")
 
