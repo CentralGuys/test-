@@ -1,5 +1,4 @@
 local ScreeenGui = game.CoreGui
-local DEBUG = true -- if its true key system automatically passed
 local Checking = game.CoreGui:FindFirstChild("Discord")
 if Checking then
 	Checking:Destroy()
